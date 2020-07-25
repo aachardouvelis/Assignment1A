@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Assignment.cs" />
     <Compile Include="Course.cs" />
+    <Compile Include="Identity.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
