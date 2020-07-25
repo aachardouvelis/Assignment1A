@@ -125,8 +125,7 @@ namespace Assignment1A
 
         public static string getMainMenuStr()
         {
-            String outp = @"Please type in a number corresponding to the option you want to be executed:
-    1.To enter entities
+            String outp = @"    1.To enter entities
     2.To edit entities
     3.To view entities
     4.To exit the program.";
@@ -135,8 +134,7 @@ namespace Assignment1A
 
         public static string getViewEntityMenuStr()
         {
-            string outp = @"Please type in a number corresponding to the option you want to be executed:
-    1.To view all the students
+            string outp = @"    1.To view all the students
     2.To view all the trainers
     3.To view all the assignments
     4.To view all the courses
@@ -151,8 +149,7 @@ namespace Assignment1A
         }
         public static string getEnterEntityMenuStr()
         {
-            string outp = @"Please type in a number corresponding to the option you want to be executed:
-    1.Enter student(s)
+            string outp = @"    1.Enter student(s)
     2.Enter trainer(s)
     3.Enter assignment(s)
     4.Enter course(s)
@@ -162,8 +159,7 @@ namespace Assignment1A
         public static string getEditEntityStr()
         {
 
-            string outp = @"Please select one of the following options:
-    1.To add existing students to other courses
+            string outp = @"    1.To add existing students to other courses
     2.To add existing trainers to other courses
     3.To add existing assignments to other courses
     4.To remove a students from a course
@@ -265,8 +261,9 @@ namespace Assignment1A
         //}
         
 
-        public static short insistForCorrectInput(string outputMenu, short start, short end)
+        public static short insistForCorrectInput(string outputMenu, short start, short end,string title="")
         {
+            Menu.WriteLineYellow(title);
             Console.WriteLine(outputMenu);
             short input;
             while (!short.TryParse(Console.ReadLine(), out input) || input < start || input > end)
@@ -282,6 +279,7 @@ namespace Assignment1A
             bool flag = true;
             string weekendStr = weekends_excluded ? "weekday(Mon-Fri)" : "";
             bool date_parsed = false;
+            Menu.WriteLineYellow("Please enter a date in the form of dd/MM/yyyy");
             while (flag)
             {
                 if (date_parsed = DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture,
@@ -297,13 +295,13 @@ namespace Assignment1A
                         Menu.WriteLineRed("You didn't enter a " + weekendStr + "date of the format dd/mm/yyyy.");
                         if (date_parsed)
                             Menu.WriteLineRed(String.Format("The date you entered is a {0}", date.DayOfWeek));
-                        Console.Write("Please try again:");
+                        Menu.WriteLineYellow("Please try again:");
                     }
                 }
                 else
                 {
                     Menu.WriteLineRed("You didn't enter a date of the format dd/MM/yyyy");
-                    Console.Write("Please try again:");
+                    Menu.WriteLineYellow("Please try again:");
                 }
 
             }
@@ -372,10 +370,10 @@ namespace Assignment1A
                 return -1;
             else
             {
+                
                 string menu_str = Menu.listToMenuStr(list);
                 //Menu.WriteLineYellow(title);
-                Console.WriteLine(title);
-                int choice = insistForCorrectInput(menu_str, 1, (short)list.Count);
+                int choice = insistForCorrectInput(menu_str, 1, (short)list.Count,title);
                 return choice;
             }
         }
