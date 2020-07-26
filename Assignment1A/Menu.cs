@@ -30,13 +30,12 @@ namespace Assignment1A
             string firstName = Console.ReadLine();
             Console.Write("Enter last name:");
             string lastName = Console.ReadLine();
-            Console.Write("Birth date (format dd/mm/yyyy):");
-            DateTime dateOfBirth = insistForCorrectDateInput();
+            DateTime dateOfBirth = insistForCorrectDateInput(false,"Birth date (format dd/mm/yyyy):");
             Console.Write("Enter his tuition fees:");
             int tuition_fees;
             while (!int.TryParse(Console.ReadLine(), out tuition_fees) || tuition_fees < 0)
             {
-                Menu.WriteLineRed("You need to enter a positive integer for the fees.");
+                Menu.WriteLineRed("Error: You need to enter a positive integer for the fees.");
                 Console.Write("Please try again:");
             }
 
@@ -56,8 +55,7 @@ namespace Assignment1A
             float total;
             while (!float.TryParse(Console.ReadLine(), out total) && total < 100 && total >= 0)
                 Console.Write("Please enter a float from 1 to 100.");
-            Console.Write("Please enter the assignment's submission date:");
-            DateTime sub_date = insistForCorrectDateInput(true);
+            DateTime sub_date = insistForCorrectDateInput(true, "Please enter the assignment's submission date:");
             return new Assignment(title, descr, oral, total, sub_date);
         }
         
@@ -70,17 +68,13 @@ namespace Assignment1A
             string type = Console.ReadLine();
             Console.Write("Please enter the stream:");
             string stream = Console.ReadLine();
-            Console.Write("Please enter the course's start date (dd/MM/yyyy):");
-            DateTime start = Menu.insistForCorrectDateInput(true);
-            Console.Write("Please enter the course's end date (dd/MM/yyyy):");
-            DateTime end = Menu.insistForCorrectDateInput(true);
+            DateTime start = Menu.insistForCorrectDateInput(true, "Please enter the course's start date (dd/MM/yyyy):");
+            DateTime end = Menu.insistForCorrectDateInput(true, "Please enter the course's end date (dd/MM/yyyy):");
             while (start.Subtract(end).TotalDays > 0)//start date after end date
             {
-                Menu.WriteLineRed("The end date given was before the start date.");
-                Console.Write("Please re-enter the course's start date (dd/MM/yyyy)");
-                start = Menu.insistForCorrectDateInput(true);
-                Console.Write("Please re-enter the course's end date (dd/MM/yyyy)");
-                end = Menu.insistForCorrectDateInput(true);
+                Menu.WriteLineRed("Error: The end date given was before the start date.");
+                start = Menu.insistForCorrectDateInput(true, "Please re-enter the course's start date (dd/MM/yyyy)");
+                end = Menu.insistForCorrectDateInput(true,"Please re-enter the course's end date (dd/MM/yyyy)");
             }
 
             return new Course(title, type, stream, start, end);
@@ -143,7 +137,9 @@ namespace Assignment1A
     7.To view all the assisgnments per course
     8.To view all the assignments per student
     9. To view a list of students that belong to more than 1 courses
-    10.To enter a date and view all students that need to submit at least one exam that week";
+    10.To enter a date and view all students that need to submit 
+       at least one exam that week
+    11.To go back";
 
             return outp;
         }
@@ -153,7 +149,8 @@ namespace Assignment1A
     2.Enter trainer(s)
     3.Enter assignment(s)
     4.Enter course(s)
-    5.Generate synthetic data for all entities";
+    5.Generate synthetic data for all entities
+    6.To go back";
             return outp;
         }
         public static string getEditEntityStr()
@@ -165,7 +162,8 @@ namespace Assignment1A
     4.To remove a students from a course
     5.To remove a trainers from a course
     6.To remove an assignment from a course
-    7.To remove a course completely";
+    7.To remove a course completely
+    8.To go back";
             
             return outp;
         }
@@ -263,45 +261,45 @@ namespace Assignment1A
 
         public static short insistForCorrectInput(string outputMenu, short start, short end,string title="")
         {
-            Menu.WriteLineYellow(title);
-            Console.WriteLine(outputMenu);
+            Menu.WriteLineYellow( title);
+            Console.WriteLine(String.Format("{0}\n",outputMenu));
             short input;
             while (!short.TryParse(Console.ReadLine(), out input) || input < start || input > end)
             {
                 WriteLineRed(String.Format("Error: You need to enter an int from {0} to {1}.", start, end));
-                Console.WriteLine(outputMenu);
+                Menu.WriteLineYellow( title);
+                Console.WriteLine(String.Format("{0}\n", outputMenu));
             }
             return input;
         }
-        public static DateTime insistForCorrectDateInput(bool weekends_excluded = false)
+        public static DateTime insistForCorrectDateInput(bool weekends_excluded = false,string title="Please enter a date(dd/MM/yyyy):")
         {
             DateTime date=new DateTime();
             bool flag = true;
             string weekendStr = weekends_excluded ? "weekday(Mon-Fri)" : "";
             bool date_parsed = false;
-            Menu.WriteLineYellow("Please enter a date in the form of dd/MM/yyyy");
+            Console.Write(title);
             while (flag)
             {
                 if (date_parsed = DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture,
                        DateTimeStyles.None, out date))
                 {
-                    //ERROR PARSING DATES
                     if (weekends_excluded && date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday)
                         flag = false;
                     else if (!weekends_excluded)
                         flag = false;
                     else
                     {  
-                        Menu.WriteLineRed("You didn't enter a " + weekendStr + "date of the format dd/mm/yyyy.");
+                        Menu.WriteLineRed("Error: You didn't enter a " + weekendStr + "date of the format dd/mm/yyyy.");
                         if (date_parsed)
-                            Menu.WriteLineRed(String.Format("The date you entered is a {0}", date.DayOfWeek));
-                        Menu.WriteLineYellow("Please try again:");
+                            Menu.WriteLineRed(String.Format("The date you entered is a {0}. Only weekdays are aloud.", date.DayOfWeek));
+                        Console.Write(title);
                     }
                 }
                 else
                 {
-                    Menu.WriteLineRed("You didn't enter a date of the format dd/MM/yyyy");
-                    Menu.WriteLineYellow("Please try again:");
+                    Menu.WriteLineRed("Error: You didn't enter a date of the format dd/MM/yyyy");
+                    Console.Write(title);
                 }
 
             }
@@ -378,43 +376,43 @@ namespace Assignment1A
             }
         }
 
-        public static Student selectStudent(List<Course> courses)
-        {
-            List<Student> distinct_students = Menu.getDistinctStudents(courses);
-            //if (distinct_students.Count > 0)
-            //{
-            string menu_str = Menu.listToMenuStr(distinct_students);
-            Console.WriteLine("Select a student to edit:");
-            Console.WriteLine(menu_str);
-            int choice = Menu.insistForCorrectInput(menu_str, 1, (short)distinct_students.Count);
-            Student chosen_student = distinct_students[choice - 1];
-            //}
-            return chosen_student;
+        //public static Student selectStudent(List<Course> courses)
+        //{
+        //    List<Student> distinct_students = Menu.getDistinctStudents(courses);
+        //    //if (distinct_students.Count > 0)
+        //    //{
+        //    string menu_str = Menu.listToMenuStr(distinct_students);
+        //    Console.WriteLine("Select a student to edit:");
+        //    Console.WriteLine(menu_str);
+        //    int choice = Menu.insistForCorrectInput(menu_str, 1, (short)distinct_students.Count);
+        //    Student chosen_student = distinct_students[choice - 1];
+        //    //}
+        //    return chosen_student;
 
-        }
-        public static Trainer selectTrainer(List<Course> courses)
-        {
-            Console.WriteLine("Select a trainer to edit:");
-            List<Trainer> distinct_trainers = Menu.getDistinctTrainers(courses);
-            string menu_str = Menu.listToMenuStr(distinct_trainers);
-            Console.WriteLine(menu_str);
-            int choice = Menu.insistForCorrectInput(menu_str, 1, (short)distinct_trainers.Count);
-            Trainer chosen_trainer = distinct_trainers[choice - 1];
-            return chosen_trainer;
-        }
+        //}
+        //public static Trainer selectTrainer(List<Course> courses)
+        //{
+        //    Console.WriteLine("Select a trainer to edit:");
+        //    List<Trainer> distinct_trainers = Menu.getDistinctTrainers(courses);
+        //    string menu_str = Menu.listToMenuStr(distinct_trainers);
+        //    Console.WriteLine(menu_str);
+        //    int choice = Menu.insistForCorrectInput(menu_str, 1, (short)distinct_trainers.Count);
+        //    Trainer chosen_trainer = distinct_trainers[choice - 1];
+        //    return chosen_trainer;
+        //}
 
 
 
-        public static Assignment selectAssignment(List<Course> courses)
-        {
-            Console.WriteLine("Select an assignment to edit:");
-            List<Assignment> distinct_assignments = Menu.getDistinctAssignments(courses);
-            string menu_str = Menu.listToMenuStr(distinct_assignments);
-            Console.WriteLine(menu_str);
-            int choice = Menu.insistForCorrectInput(menu_str, 1, (short)distinct_assignments.Count);
-            Assignment chosen_assignment = distinct_assignments[choice - 1];
-            return chosen_assignment;
-        }
+        //public static Assignment selectAssignment(List<Course> courses)
+        //{
+        //    Console.WriteLine("Select an assignment to edit:");
+        //    List<Assignment> distinct_assignments = Menu.getDistinctAssignments(courses);
+        //    string menu_str = Menu.listToMenuStr(distinct_assignments);
+        //    Console.WriteLine(menu_str);
+        //    int choice = Menu.insistForCorrectInput(menu_str, 1, (short)distinct_assignments.Count);
+        //    Assignment chosen_assignment = distinct_assignments[choice - 1];
+        //    return chosen_assignment;
+        //}
         public static List<Assignment> getAssignmentsOfStudent(List<Course> courses, Student student)
         {
             List<Course> student_courses = getCoursesOfIdentity(courses, student);

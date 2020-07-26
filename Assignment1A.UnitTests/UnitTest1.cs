@@ -8,9 +8,11 @@ namespace Assignment1A.UnitTests
     public class MenuTests
     {
         List<Course> courses;
+        public List<Student> dummy_students;
         public MenuTests()
         {
             courses = Menu.GetSyntheticData1();
+            dummy_students = new List<Student> { new Student("A", "A", new DateTime(), 100), new Student("B", "B", new DateTime(), 150) };
         }
         [TestMethod]
         public void isDuplicate_ListIsEmpty_ReturnsFalse()
@@ -20,11 +22,12 @@ namespace Assignment1A.UnitTests
             Assignment ass = new Assignment("A", "description_data", 50, 50, new DateTime());
 
             //Act
-            bool ret=Menu.isDuplicate(alist, ass);
+            bool ret = Menu.isDuplicate(alist, ass);
 
             //Assert
             Assert.IsFalse(ret);
         }
+        
         [TestMethod]
         public void isDuplicate_SendStudentObj_ReturnsTrue()
         {

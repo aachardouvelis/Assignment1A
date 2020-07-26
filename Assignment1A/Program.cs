@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Assignment1A
 {
-    // SATURDAY SUNDAY NOT ALOUD IN DATETIME
+    
     // To view Students posa properties prepei na kanei display? 
     //To edit pos akribos prepei nane?
     // h main mou exei arketo kodika se kathe if statement - den einai if branches me 1 method sto kathe branch
@@ -22,7 +22,7 @@ namespace Assignment1A
         {
             
             bool exit = false;
-            bool syntheticUsed = false; // implement
+            bool syntheticUsed = false;
             const string default_menu_title = "Please type in a number corresponding to the option you want to be executed:";
             List<Course> courses = new List<Course>();
             while (!exit)
@@ -34,7 +34,7 @@ namespace Assignment1A
                     bool continue_adding_entities = true;
                     while (continue_adding_entities)
                     {
-                        choice = Menu.insistForCorrectInput(Menu.getEnterEntityMenuStr(), 1, 5, default_menu_title);
+                        choice = Menu.insistForCorrectInput(Menu.getEnterEntityMenuStr(), 1, 6, default_menu_title);
                         if (choice == 1)// enter students mode
                         {
                             bool continue_adding = true;
@@ -42,8 +42,8 @@ namespace Assignment1A
                             {
                                 //check if courses exist
                                 //check if student exists in the same course
-                                if (courses.Count == 0)
-                                    Menu.WriteLineRed("You don't have any courses to add students to");
+                                if (courses.Count <= 0)
+                                    Menu.WriteLineRed("Error: You don't have any courses to add students to");
                                 else
                                 {
                                     choice = Menu.selectFromList("Select a course to add the student to:", courses); 
@@ -58,7 +58,7 @@ namespace Assignment1A
                                     //}
                                 }
 
-                                continue_adding = Menu.insistForCorrectInput("Continue Adding Trainers?", (short)1, (short)2, "Yes\n2.No") == 1 ? true : false;
+                                continue_adding = Menu.insistForCorrectInput("1.Yes\n2.No", (short)1, (short)2, "Continue Adding Students?") == 1 ? true : false;
                             }
                         }
                         else if (choice == 2)//Enter trainers mode
@@ -67,16 +67,12 @@ namespace Assignment1A
                             while (continue_adding)
                             {
                                 if (courses.Count == 0)
-                                    Menu.WriteLineRed("You don't have any courses to add trainers to");
+                                    Menu.WriteLineRed("Error: You don't have any courses to add trainers to");
                                 else
                                 {
                                     choice = Menu.selectFromList("Please select a course:", courses);
-                                    //String courses_menu = Menu.listToMenuStr(courses);// Menu.getCourseMenuStr(courses);
-                                    //choice = Menu.insistForCorrectInput(courses_menu, 1, (short)courses.Count);
-
-                                    Course courseChosen = courses[choice - 1];//'-1' need to scale down the menu choice (1-max)->)(0-max)
+                                    Course courseChosen = courses[choice - 1];
                                     Trainer trainer = Menu.constructTrainer();
-
                                     courseChosen.addTrainer(trainer);
                                 }
                                 continue_adding = Menu.insistForCorrectInput("1.Yes\n2.No", (short)1, (short)2, "Continue Adding Trainers?") == 1 ? true : false;
@@ -88,7 +84,7 @@ namespace Assignment1A
                             while (continue_adding)
                             {
                                 if (courses.Count == 0)
-                                    Menu.WriteLineRed("You don't have any courses to add assignments to");
+                                    Menu.WriteLineRed("Error: You don't have any courses to add assignments to");
                                 else
                                 {
                                     choice = Menu.selectFromList("Please select a course:", courses);
@@ -109,7 +105,7 @@ namespace Assignment1A
                                 if (!Menu.isDuplicate(courses, course))
                                     courses.Add(course);
                                 else
-                                    Menu.WriteLineRed("That course already exists.");
+                                    Menu.WriteLineRed("Error: That course already exists.");
                                 continue_adding = Menu.insistForCorrectInput("1.Yes\n2.No", (short)1, (short)2, "Continue Adding Courses?") == 1 ? true : false;
                             }
                         }
@@ -123,8 +119,11 @@ namespace Assignment1A
                                     courses.Add(courIter);
                             }
                             else
-                                Menu.WriteLineRed("Can't add synthetic data twice!");
+                                Menu.WriteLineRed("Error: Can't add synthetic data twice!");
                         }
+                        else if (choice == 6)
+                            break;
+
                         continue_adding_entities = Menu.insistForCorrectInput("1.Yes\n2.No", (short)1, (short)2, "Continue Adding Entities?") == 1 ? true : false;
                     }
                 }
@@ -134,7 +133,7 @@ namespace Assignment1A
                     while (continue_editting)
                     {
                         string outp = Menu.getEditEntityStr();
-                        choice = Menu.insistForCorrectInput(outp, 1, 7,default_menu_title);
+                        choice = Menu.insistForCorrectInput(outp, 1, 8,default_menu_title);
                         if (choice == 1)//Edit: +students ->courses
                         {
                             List<Student> students = Menu.getDistinctStudents(courses);
@@ -154,10 +153,10 @@ namespace Assignment1A
 
                                 }
                                 else
-                                    Menu.WriteLineRed("Student {0} is already added in every existing course");
+                                    Menu.WriteLineRed("Error: Student {0} is already added in every existing course");
                             }
                             else
-                                Menu.WriteLineRed("No students have been added yet.");
+                                Menu.WriteLineRed("Error: No students have been added yet.");
 
                         }
                         else if (choice == 2)//Edit: +trainers ->courses
@@ -177,20 +176,18 @@ namespace Assignment1A
                                     chosen_course.addTrainer(chosen_trainer);
                                 }
                                 else
-                                    Menu.WriteLineRed(string.Format("Trainer {0} {1} is already added in every existing course", chosen_trainer.getFirstName(), chosen_trainer.getLastName()));
+                                    Menu.WriteLineRed(string.Format("Error: Trainer {0} {1} is already added in every existing course", chosen_trainer.getFirstName(), chosen_trainer.getLastName()));
 
                             }
                             else
-                                Menu.WriteLineRed("No Trainers have been added yet");
+                                Menu.WriteLineRed("Error: No Trainers have been added yet");
 
 
                         }
                         else if (choice == 3)//Edit: +assignments ->courses
                         {
 
-                            //Assignment chosen_assignment = Menu.selectAssignment(courses);
                             List<Assignment> assignments = Menu.getDistinctAssignments(courses);
-                            //Menu.removeElementFromCourses(courses, assignments);
                             if (assignments.Count > 0)
                             {
                                 choice = Menu.selectFromList("Please select an assignment:", assignments);
@@ -204,11 +201,11 @@ namespace Assignment1A
                                     chosen_course.addAssignment(chosen_assignment);
                                 }
                                 else
-                                    Menu.WriteLineRed(string.Format("Assignment {0} is already added in every existing course", chosen_assignment.getTitle()));
+                                    Menu.WriteLineRed(string.Format("Error: Assignment {0} is already added in every existing course", chosen_assignment.getTitle()));
 
                             }
                             else
-                                Menu.WriteLineRed("No assignments have been created yet");
+                                Menu.WriteLineRed("Error: No assignments have been created yet");
                         }
                         else if (choice == 4)//Edit: -students ->courses
                         {
@@ -227,10 +224,10 @@ namespace Assignment1A
                                     chosen_course.remove(chosen_student);
                                 }
                                 else
-                                    Menu.WriteLineRed(String.Format("Student {0} isn't added in any courses yet", chosen_student.getFirstName() + " " + chosen_student.getLastName()));
+                                    Menu.WriteLineRed(String.Format("Error: Student {0} isn't added in any courses yet", chosen_student.getFirstName() + " " + chosen_student.getLastName()));
                             }
                             else
-                                Menu.WriteLineRed("No students have been added yet");
+                                Menu.WriteLineRed("Error: No students have been added yet");
 
                         }
                         else if (choice == 5)//Edit: -trainers ->courses
@@ -251,8 +248,10 @@ namespace Assignment1A
                                 }
 
                                 else
-                                    Menu.WriteLineRed(String.Format("Trainer {0} isn't added in any courses yet", chosen_trainer.getFirstName() + " " + chosen_trainer.getLastName()));
+                                    Menu.WriteLineRed(String.Format("Error: Trainer {0} isn't added in any courses yet", chosen_trainer.getFirstName() + " " + chosen_trainer.getLastName()));
                             }
+                            else
+                                Menu.WriteLineRed("Error: You don't have any trainers in the system.");
                         }
                         else if (choice == 6)//Edit: -assignments ->courses
                         {
@@ -272,10 +271,10 @@ namespace Assignment1A
                                     chosen_course.remove(chosen_assignment);
                                 }
                                 else
-                                    Menu.WriteLineRed(String.Format("Assignment {0} isn't added in any courses yet", chosen_assignment.getTitle()));
+                                    Menu.WriteLineRed(String.Format("Error: Assignment {0} isn't added in any courses yet", chosen_assignment.getTitle()));
                             }
                             else
-                                Menu.WriteLineRed("No assignments have been added yet");
+                                Menu.WriteLineRed("Error: There are no assignments in the system");
 
 
                         }
@@ -285,8 +284,10 @@ namespace Assignment1A
                             courses.RemoveAt(choice - 1);
 
                         }
+                        else if (choice == 8)
+                            break;
                         continue_editting = Menu.insistForCorrectInput("1.Yes\n2.No", (short)1, (short)2, "Continue Editting Entities?") == 1 ? true : false;
-
+                        
                     }
                 }
                 else if (choice == 3) // VIEW MODE
@@ -294,7 +295,7 @@ namespace Assignment1A
                     bool continue_viewing_entities = true;
                     while (continue_viewing_entities)
                     {
-                        choice = Menu.insistForCorrectInput(Menu.getViewEntityMenuStr(), 1, 10,default_menu_title);
+                        choice = Menu.insistForCorrectInput(Menu.getViewEntityMenuStr(), 1, 11,default_menu_title);
                         if (choice == 1)//students
                         {
                             List<Student> distinctStudents = Menu.getDistinctStudents(courses);
@@ -305,7 +306,7 @@ namespace Assignment1A
                             }
 
                             else
-                                Menu.WriteLineRed("No students have been added yet.");
+                                Menu.WriteLineRed("Error: No students have been added yet.");
                         }
                         else if (choice == 2)//trainers
                         {
@@ -316,7 +317,7 @@ namespace Assignment1A
                                 Console.WriteLine(Menu.listToMenuStr(distinctTrainers));
                             }
                             else
-                                Menu.WriteLineRed("No trainers have been added yet.");
+                                Menu.WriteLineRed("Error: No trainers have been added yet.");
                         }
                         else if (choice == 3)//assignments
                         {
@@ -327,7 +328,7 @@ namespace Assignment1A
                                 Console.WriteLine(Menu.listToMenuStr(distinctAssignments));
                             }
                             else
-                                Menu.WriteLineRed("No assignments have been added yet.");
+                                Menu.WriteLineRed("Error: No assignments have been added yet.");
                         }
                         else if (choice == 4)//courses
                         {
@@ -338,23 +339,23 @@ namespace Assignment1A
 
                             }
                             else
-                                Menu.WriteLineRed("No courses have been added yet");
+                                Menu.WriteLineRed("Error: No courses have been added yet");
 
                         }
                         else if (choice == 5)//All the students per course 
                         {
                             if (courses.Count > 0)
                             {
-                                choice = Menu.selectFromList("Please select a course to show its students:",courses);
+                                choice = Menu.selectFromList("Please select a course to show its students:", courses);
                                 Course courseChosen = courses[choice - 1];//'-1' need to scale down the menu choice (1-max)->)(0-max
                                 if (courseChosen.getStudents().Count > 0)
                                     Console.WriteLine(Menu.listToMenuStr(courseChosen.getStudents()));
                                 else
-                                    Menu.WriteLineRed(String.Format("You haven't entered any students yet for course {0}", choice));
+                                    Menu.WriteLineRed(String.Format("Error: You haven't entered any students yet for course {0}", choice));
                             }
                             else
                             {
-                                Menu.WriteLineRed("No students nor courses have been added yet");
+                                Menu.WriteLineRed("Error: No students nor courses have been added yet");
                             }
                         }
                         else if (choice == 6) //All the trainers per course 
@@ -366,11 +367,11 @@ namespace Assignment1A
                                 if (courseChosen.getTrainers().Count > 0)
                                     Console.WriteLine(Menu.listToMenuStr(courseChosen.getTrainers()));
                                 else
-                                    Menu.WriteLineRed(String.Format("You haven't entered any trainers yet for course {0}", choice));
+                                    Menu.WriteLineRed(String.Format("Error: You haven't entered any trainers yet for course {0}", choice));
                             }
                             else
                             {
-                                Menu.WriteLineRed("No trainers nor courses have been added yet");
+                                Menu.WriteLineRed("Error: No trainers nor courses have been added yet");
                             }
                         }
                         else if (choice == 7)//All the assignments per course 
@@ -382,13 +383,13 @@ namespace Assignment1A
                                 if (courseChosen.getAssignments().Count > 0)
                                     Console.WriteLine(Menu.listToMenuStr(courseChosen.getAssignments()));
                                 else
-                                    Menu.WriteLineRed(String.Format("You haven't entered any assignments yet for course {0}", choice));
+                                    Menu.WriteLineRed(String.Format("Error: You haven't entered any assignments yet for course {0}", choice));
 
 
                             }
                             else
                             {
-                                Menu.WriteLineRed("No assignments nor courses have been created.");
+                                Menu.WriteLineRed("Error: No assignments nor courses have been created.");
                             }
                         }
                         else if (choice == 8)//All the assignments per student 
@@ -404,18 +405,19 @@ namespace Assignment1A
 
                                     //now find all distinct assignments for the chosen student and print them;
                                     List<Assignment> distinct_assignments = Menu.getAssignmentsOfStudent(courses, chosen_student);
-                                    if (distinct_assignments.Count > 0) {
+                                    if (distinct_assignments.Count > 0)
+                                    {
                                         Menu.WriteLineYellow(String.Format("{0} {1}'s assignments:\n{2}", chosen_student.getFirstName(), chosen_student.getLastName()));
                                         Console.WriteLine(Menu.listToMenuStr(distinct_assignments));
                                     }
                                     else
-                                        Menu.WriteLineRed(String.Format("Student {0} doesn't have any assignments due", chosen_student));
+                                        Menu.WriteLineRed(String.Format("Error: Student {0} doesn't have any assignments due", chosen_student));
                                 }
                                 else
-                                    Menu.WriteLineRed("You haven't entered students yet");
+                                    Menu.WriteLineRed("Error: You haven't entered students yet");
                             }
                             else
-                                Menu.WriteLineRed("You can't have any assignments or students without adding courses first");
+                                Menu.WriteLineRed("Error: You can't have any assignments or students without adding courses first");
 
 
                         }
@@ -430,10 +432,10 @@ namespace Assignment1A
                                     Console.WriteLine(Menu.listToMenuStr(studentDuplicates));
                                 }
                                 else
-                                    Menu.WriteLineRed("Curently 0 students are in more than one courses");
+                                    Menu.WriteLineRed("Error: Curently 0 students are in more than one courses");
                             }
                             else
-                                Menu.WriteLineRed("You haven't added any courses yet.");
+                                Menu.WriteLineRed("Error: You haven't added any courses yet.");
                         }
                         else if (choice == 10)// ask from the user a date and it should output a 
                                               //list of students who need to submit one or more assignments 
@@ -441,11 +443,10 @@ namespace Assignment1A
                         {
                             if (courses.Count > 0)
                             {
-                                
+                                //check for Sunday /saturday input dates
 
                                 DateTime givenDay = Menu.insistForCorrectDateInput();
                                 DateTime monday = Menu.WeekDayDate(givenDay, DayOfWeek.Monday);
-                                
                                 DateTime friday = Menu.WeekDayDate(givenDay, DayOfWeek.Friday);
                                 if (monday.DayOfWeek != DayOfWeek.Monday)
                                     throw new InvalidDataException("NOT MONDAY BRO");
@@ -453,13 +454,15 @@ namespace Assignment1A
                                     throw new InvalidDataException("NOT FRIDAY BRO");
                                 List<Student> subm_students = Menu.getWeekSubmissionStudents(courses, monday, friday);
                                 if (subm_students.Count > 0)
-                                    Console.WriteLine("Students that need to submit assignments from {0} to {1}\n{3}", monday, friday, Menu.listToMenuStr(subm_students));
+                                    Console.WriteLine("Students that need to submit assignments from {0} to {1}\n{2}", monday, friday, Menu.listToMenuStr(subm_students));
                                 else
-                                    Menu.WriteLineRed("No students have assignments to submit during those days");
+                                    Menu.WriteLineRed("Error: No students have assignments to submit during those days");
                             }
                             else
-                                Menu.WriteLineRed("No courses have been added yet");
+                                Menu.WriteLineRed("Error: No courses have been added yet");
                         }
+                        else if (choice == 11)
+                            break;
 
                         continue_viewing_entities = Menu.insistForCorrectInput("1.Yes\n2.No", (short)1, (short)2,"Continue Viewing stuff?") == 1 ? true : false;
                     }
