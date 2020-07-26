@@ -80,42 +80,7 @@ namespace Assignment1A
             return new Course(title, type, stream, start, end);
         }
 
-       
 
-        //private static bool isDuplicate(List<Assignment> assignments,Assignment assignment)
-        //{
-        //    //CHECK IF IT WORKS FOR LIST SIZE ==0
-        //    foreach (Assignment assIter in assignments)
-        //        if (assignment.ID == assIter.ID)
-        //            return true;
-        //    return false;
-        //}
-
-        //public static bool isDuplicate(List<Course> courses, Course course)
-        //{
-        //    foreach (Course curIter in courses)
-        //        if (curIter.getTitle() == course.getTitle() 
-        //                && curIter.getType() == course.getType() 
-        //                && curIter.getStream() == course.getStream())
-        //            return true;
-        //    return false;
-        //}
-
-        //public static bool isDuplicate(List<Identity> elements,Identity element)
-        //{
-        //    foreach (Identity idIter in elements)
-        //        if (idIter.ID == element.ID)
-        //            return true;
-        //    return false;
-        //}
-
-        public static bool isDuplicate(IEnumerable<Identity> elements, Identity element)
-        {
-            foreach (Identity idIter in elements)
-                if (idIter.ID == element.ID)
-                    return true;
-            return false;
-        }
 
         public static string getMainMenuStr()
         {
@@ -313,7 +278,7 @@ namespace Assignment1A
             string outp = "";
 
             for (int i = 0; i < list.Count(); i++)
-                outp += String.Format("\n{0}.{1}", i+1, list[i]);
+                outp += String.Format("{0}.{1}\n\n", i+1, list[i]);
             return outp;
         }
 
@@ -375,44 +340,14 @@ namespace Assignment1A
                 return choice;
             }
         }
+        public static bool isDuplicate(IEnumerable<Identity> elements, Identity element)
+        {
+            foreach (Identity idIter in elements)
+                if (idIter.ID == element.ID)
+                    return true;
+            return false;
+        }
 
-        //public static Student selectStudent(List<Course> courses)
-        //{
-        //    List<Student> distinct_students = Menu.getDistinctStudents(courses);
-        //    //if (distinct_students.Count > 0)
-        //    //{
-        //    string menu_str = Menu.listToMenuStr(distinct_students);
-        //    Console.WriteLine("Select a student to edit:");
-        //    Console.WriteLine(menu_str);
-        //    int choice = Menu.insistForCorrectInput(menu_str, 1, (short)distinct_students.Count);
-        //    Student chosen_student = distinct_students[choice - 1];
-        //    //}
-        //    return chosen_student;
-
-        //}
-        //public static Trainer selectTrainer(List<Course> courses)
-        //{
-        //    Console.WriteLine("Select a trainer to edit:");
-        //    List<Trainer> distinct_trainers = Menu.getDistinctTrainers(courses);
-        //    string menu_str = Menu.listToMenuStr(distinct_trainers);
-        //    Console.WriteLine(menu_str);
-        //    int choice = Menu.insistForCorrectInput(menu_str, 1, (short)distinct_trainers.Count);
-        //    Trainer chosen_trainer = distinct_trainers[choice - 1];
-        //    return chosen_trainer;
-        //}
-
-
-
-        //public static Assignment selectAssignment(List<Course> courses)
-        //{
-        //    Console.WriteLine("Select an assignment to edit:");
-        //    List<Assignment> distinct_assignments = Menu.getDistinctAssignments(courses);
-        //    string menu_str = Menu.listToMenuStr(distinct_assignments);
-        //    Console.WriteLine(menu_str);
-        //    int choice = Menu.insistForCorrectInput(menu_str, 1, (short)distinct_assignments.Count);
-        //    Assignment chosen_assignment = distinct_assignments[choice - 1];
-        //    return chosen_assignment;
-        //}
         public static List<Assignment> getAssignmentsOfStudent(List<Course> courses, Student student)
         {
             List<Course> student_courses = getCoursesOfIdentity(courses, student);

@@ -57,24 +57,15 @@ namespace Assignment1A
                 elements = getAssignments();
             else if (typeof(Course).IsInstanceOfType(element))
 
-                elements = getTrainers();
+                throw new ArgumentException("A course cant contain a course");
             else if (typeof(Trainer).IsInstanceOfType(element))
                 elements = getTrainers();
             else
             {
                 throw new ArgumentException(String.Format("recieved something thats not a student/assignment/trainer\nelement:{0}", element));
-                //elements = new List<Identity>();
             }
             foreach (Identity idenIter in elements)
                 if (idenIter.ID == element.ID)
-                    return true;
-            return false;
-        }
-
-        public bool hasStudent(Student student)
-        {
-            foreach (Student studIter in students)
-                if (studIter.ID == student.ID)
                     return true;
             return false;
         }
@@ -88,30 +79,7 @@ namespace Assignment1A
             return assignments;
         }
 
-        //public bool isDuplicate(Student student)
-        //{
-        //    foreach (Student stu in students)
-        //        if (stu.ID == student.ID)
-        //            return true;
-        //    return false;
-        //}
-        //public bool isDuplicate(Trainer trainer)
-        //{
-        //    foreach (Trainer trai in trainers)
-        //        if (trai.ID == trainer.ID)
-        //            return true;
-        //    return false;
-        //}
-        //public bool isDuplicate(Assignment assignment)
-        //{
-        //    //Func<double, double, double> mult = (x, y) => (x * y);
-        //    //delegate bool myCalc(assignment one, assignment two);
-        //    //Func<Assignment, Assignment, bool> func1 = (ass1, ass2) => ass1.getTitle() == ass2.getTitle() && ass1.getDescription()==ass2.getDescription();
-        //    foreach (Assignment assIter in assignments)
-        //        if (assIter.getTitle() == assignment.getTitle() && assIter.getDescription() == assignment.getDescription())
-        //            return true;
-        //    return false;
-        //}
+        
 
         public void addTrainer(Trainer trainer)
         {
@@ -122,35 +90,11 @@ namespace Assignment1A
         {
             return trainers;    
         }
-        //public override string toString() { 
         public override string ToString()
         {
             return String.Format("Title:{0}, Type:{1}, Stream{2}, Starts:{3}, Ends:{4}", title, type, stream, start_date.ToString("dd/MM/yyy"), end_date.ToString("dd/MM/yyy"));
         }
-          
-
-        
-        //private static bool contains(List<Student> students, Student student)
-        //{
-        //    foreach (Student stuIter in students)
-        //        if (stuIter.ID == student.ID)
-        //            return true;
-        //    return false;
-        //}
-        //private static bool contains(List<Trainer> trainers, Trainer trainer)
-        //{
-        //    foreach (Trainer trainIter in trainers)
-        //        if (trainIter.ID == trainer.ID)
-        //            return true;
-        //    return false;
-        //}
-        //private static bool contains(List<Assignment> assignments,Assignment assignment)
-        //{
-        //    foreach (Assignment assIter in assignments)
-        //        if (assIter.ID == assignment.ID)
-        //            return true;
-        //    return false;
-        //}
+         
         public string getTitle() { return title; }
         public void setTitle(string title) { this.title = title; }
         public string getStream() { return stream; }
@@ -162,38 +106,22 @@ namespace Assignment1A
         public DateTime getEndDate() { return end_date; }
         public void setEndDate(DateTime end_date) { this.end_date = end_date; }// should I accept strings or DateTimes?
 
-        internal bool hasTrainer(Trainer trainer)
-        {
-            foreach (Trainer trainIter in trainers)
-                if (trainer.ID == trainIter.ID)
-                    return true;
-            return false;
-        }
-        public static List<Course> getCoursesOfTrainer(List<Course> courses, Trainer chosen_trainer)
-        {
-            List<Course> courses_owned = new List<Course>();
-            foreach (Course courIter in courses)
-                if (courIter.hasTrainer(chosen_trainer))
-                    courses_owned.Add(courIter);
+        //public static List<Course>getCoursesOfAssignment(List<Course> courses, Assignment assignment)
+        //{
+        //    List<Course> courses_owned = new List<Course>();
+        //    foreach (Course courIter in courses)
+        //        if (courIter.hasAssignment(assignment))
+        //            courses_owned.Add(courIter);
 
-            return courses_owned;
-        }
-        public static List<Course>getCoursesOfAssignment(List<Course> courses, Assignment assignment)
-        {
-            List<Course> courses_owned = new List<Course>();
-            foreach (Course courIter in courses)
-                if (courIter.hasAssignment(assignment))
-                    courses_owned.Add(courIter);
-
-            return courses_owned;
-        }
-        internal bool hasAssignment(Assignment assignment)
-        {
-            foreach (Assignment assIter in assignments)
-                if (assignment.ID == assIter.ID)
-                    return true;
-            return false;
-        }
+        //    return courses_owned;
+        //}
+        //internal bool hasAssignment(Assignment assignment)
+        //{ 
+        //    foreach (Assignment assIter in assignments)
+        //        if (assignment.ID == assIter.ID)
+        //            return true;
+        //    return false;
+        //}
 
         //public void remove(Identity chosen_iden)
         //{

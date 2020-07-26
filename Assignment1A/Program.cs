@@ -280,8 +280,13 @@ namespace Assignment1A
                         }
                         else if (choice == 7)
                         {
-                            choice = Menu.selectFromList("Pick a course to delete:", courses);
-                            courses.RemoveAt(choice - 1);
+                            if (courses.Count > 0)
+                            {
+                                choice = Menu.selectFromList("Pick a course to delete:", courses);
+                                courses.RemoveAt(choice - 1);
+                            }
+                            else
+                                Menu.WriteLineRed("Error: No courses are currently in the system.");
 
                         }
                         else if (choice == 8)
