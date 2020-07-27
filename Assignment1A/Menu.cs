@@ -268,9 +268,7 @@ namespace Assignment1A
                 }
 
             }
-            return date;
-
-           
+            return date;  
         }
 
         public static string listToMenuStr<E>(List<E> list)
@@ -328,12 +326,10 @@ namespace Assignment1A
         //}
         public static int selectFromList<E>(string title,List<E> list)
         {
-            
             if (list.Count() < 0)
                 return -1;
             else
             {
-                
                 string menu_str = Menu.listToMenuStr(list);
                 //Menu.WriteLineYellow(title);
                 int choice = insistForCorrectInput(menu_str, 1, (short)list.Count,title);

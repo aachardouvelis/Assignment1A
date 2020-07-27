@@ -14,8 +14,48 @@ namespace Assignment1A.UnitTests
             courses = Menu.GetSyntheticData1();
             dummy_students = new List<Student> { new Student("A", "A", new DateTime(), 100), new Student("B", "B", new DateTime(), 150) };
         }
-        [TestMethod]
-        public void isDuplicate_ListIsEmpty_ReturnsFalse()
+        [DataTestMethod]
+        [DataRow(2020, 7, 27, DayOfWeek.Monday,DayOfWeek.Monday)]
+        [DataRow(2020, 7,28 , DayOfWeek.Monday, DayOfWeek.Monday)]
+        [DataRow(2020, 7,29, DayOfWeek.Monday, DayOfWeek.Monday)]
+        [DataRow(2020, 7,30, DayOfWeek.Monday, DayOfWeek.Monday)]
+        [DataRow(2020, 7,31, DayOfWeek.Monday, DayOfWeek.Monday)]
+        [DataRow(2020, 8,1, DayOfWeek.Monday, DayOfWeek.Monday)]
+        [DataRow(2020, 8, 2, DayOfWeek.Monday, DayOfWeek.Monday)]
+        [DataRow(2020, 7, 27, DayOfWeek.Friday, DayOfWeek.Friday)]
+        [DataRow(2020, 7, 28 , DayOfWeek.Friday, DayOfWeek.Friday)]
+        [DataRow(2020, 7, 29, DayOfWeek.Friday, DayOfWeek.Friday)]
+        [DataRow(2020, 7, 30, DayOfWeek.Friday, DayOfWeek.Friday)]
+        [DataRow(2020, 7, 31, DayOfWeek.Friday, DayOfWeek.Friday)]
+        [DataRow(2020, 8, 1, DayOfWeek.Friday, DayOfWeek.Friday)]
+        [DataRow(2020, 8, 2, DayOfWeek.Friday, DayOfWeek.Friday)]
+        public void WeekDateTime_sendDates_returnMonday(int year, int month, int day, DayOfWeek dayofweek,DayOfWeek result)
+        {
+            DateTime dt = new DateTime(year, month, day);
+            DateTime ret = Menu.WeekDayDate(dt, dayofweek);
+
+            Assert.AreEqual(ret.DayOfWeek, result);
+        }
+        [DataTestMethod]
+        [DataRow(2020, 7, 26, -1)]
+        [DataRow(2020, 7, 27, 0)]
+        [DataRow(2020, 7, 28, 1)]
+        [DataRow(2020, 7, 29, 2)]
+        [DataRow(2020, 7, 30, 3)]
+        [DataRow(2020, 7, 31, 4)]
+        [DataRow(2020, 8, 1, 5)]
+        
+        public void WeekDateTime_sendDates_returnCorrectDayDiffFromMonday(int year,int month, int day, int diff)
+        {
+            DateTime dt = new DateTime(year, month, day);
+            DateTime ret = Menu.WeekDayDate(dt, DayOfWeek.Monday);
+            int result = dt.DayOfWeek - ret.DayOfWeek;
+            Assert.AreEqual(result, diff);
+        }
+       
+            [TestMethod]
+
+            public void isDuplicate_ListIsEmpty_ReturnsFalse()
         {
             //Arrange
             List<Assignment> alist = new List<Assignment>();
@@ -45,37 +85,8 @@ namespace Assignment1A.UnitTests
             //Student stu1 = new Student("name", "lastn", bdate, 100);
 
         }
-        [TestMethod]
-        public void WeekDateTime_sendMonday_returnMonday()
-        {
-            DateTime date_given;
-            DateTime.TryParse(("20/07/2020"), out date_given);//MONDAY
-            DateTime ret=Menu.WeekDayDate(date_given, DayOfWeek.Monday);
-            Assert.IsTrue(ret.DayOfWeek == DayOfWeek.Monday);
-        }
-        [TestMethod]
-        public void WeekDateTime_sendTuesday_returnMonday()
-        {
-            DateTime date_given;
-            DateTime.TryParse(("21/07/2020"), out date_given);//Tuesday
-            DateTime ret = Menu.WeekDayDate(date_given, DayOfWeek.Monday);
-            Assert.IsTrue(ret.DayOfWeek == DayOfWeek.Monday);
-        }
-        [TestMethod]
-        public void WeekDateTime_sendFriday_returnMonday()
-        {
-            DateTime date_given;
-            DateTime.TryParse(("24/07/2020"), out date_given);//Friday
-            DateTime ret = Menu.WeekDayDate(date_given, DayOfWeek.Monday);
-            Assert.IsTrue(ret.DayOfWeek == DayOfWeek.Monday);
-        }
-        [TestMethod]
-        public void WeekDateTime_sendThursday_returnFriday()
-        {
-            DateTime date_given;
-            DateTime.TryParse(("23/07/2020"), out date_given);//Thursday
-            DateTime ret = Menu.WeekDayDate(date_given, DayOfWeek.Friday);
-            Assert.IsTrue(ret.DayOfWeek == DayOfWeek.Friday);
-        }
+        
+
+        
     }
 }
